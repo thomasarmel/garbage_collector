@@ -1,17 +1,22 @@
-//#include <iostream>
+#include <iostream>
 #include "RandomObject.h"
 
 RandomObject::RandomObject(int i) : _i(i)
 {
-    //std::cout << "RandomObject::RandomObject(" << _i << ")" << std::endl;
+    std::cout << "RandomObject::RandomObject(" << _i << ")" << std::endl;
 }
 
 RandomObject::~RandomObject()
 {
-    //std::cout << "RandomObject::~RandomObject(" << _i << ")" << std::endl;
+    std::cout << "RandomObject::~RandomObject(" << _i << ")" << std::endl;
 }
 
 int RandomObject::getValue() const
 {
     return _i;
+}
+
+void RandomObject::setValue(int value)
+{
+    _i = value;
 }

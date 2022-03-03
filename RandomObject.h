@@ -10,6 +10,7 @@ public:
     explicit RandomObject(int i);
     ~RandomObject();
     [[nodiscard]] int getValue() const;
+    void setValue(int value);
 
 private:
     int _i = 0;
