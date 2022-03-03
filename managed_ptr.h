@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <utility>
+#include <iosfwd>
 #include "GarbageCollector.h"
 
 template <typename T>
@@ -11,6 +12,15 @@ class managed_ptr
 public:
 
     explicit managed_ptr(T *object) : _objectAndReferencesCounter(new std::pair<T*, size_t>(object, 1))
+    {
+    }
+
+    managed_ptr(const T &value) : _objectAndReferencesCounter(new std::pair<T*, size_t>(new T(value), 1))
+    {
+    }
+
+    template <typename TT>
+    managed_ptr(const TT &value) : _objectAndReferencesCounter(new std::pair<T*, size_t>(new T(value), 1))
     {
     }
 
@@ -56,6 +66,12 @@ public:
     {
         return *(_objectAndReferencesCounter->first);
     }
+
+    /*friend std::ostream &operator<<(std::ostream &out, const T &obj)
+    {
+        out << *obj;
+        return out;
+    }*/
 
 private:
     void cleanAndAddToGC()

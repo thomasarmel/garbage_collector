@@ -1,11 +1,12 @@
 #include <thread>
+#include <cstdint>
 #include "GarbageCollector.h"
 #include "CurrentResourceUsage.h"
 
 //#include <iostream>
 
-constexpr unsigned char SECRETARY_PHASES_MAX_TICK[] = {7, 13};
-constexpr long long int SECRETARY_TICK_DURATION_MS = 10;
+constexpr uint8_t SECRETARY_PHASES_MAX_TICK[] = {7, 13};
+constexpr int64_t SECRETARY_TICK_DURATION_MS = 10;
 
 GarbageCollector* GarbageCollector::_instance = nullptr;
 
@@ -31,7 +32,7 @@ void GarbageCollector::add(void* pointer, void (*destructorFunction)(void*))
 
 [[noreturn]] void GarbageCollector::run()
 {
-    unsigned char phase1Counter = 0, phase2Counter = 0;
+    uint8_t phase1Counter = 0, phase2Counter = 0;
     bool phase1 = true;
     float minLoadPhase1 = 1.0f;
     while(true)
