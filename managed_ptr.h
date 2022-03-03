@@ -67,11 +67,25 @@ public:
         return *(_objectAndReferencesCounter->first);
     }
 
-    /*friend std::ostream &operator<<(std::ostream &out, const T &obj)
+    friend std::ostream &operator<<(std::ostream &out, const managed_ptr &obj)
     {
         out << *obj;
         return out;
-    }*/
+    }
+
+    template <typename TT>
+    managed_ptr& operator=(const TT &otherValue)
+    {
+        *(_objectAndReferencesCounter->first) = T(otherValue);
+        return *this;
+    }
+
+    template <typename TT>
+    managed_ptr& operator+=(const TT &otherValue)
+    {
+        *(_objectAndReferencesCounter->first) += T(otherValue);
+        return *this;
+    }
 
 private:
     void cleanAndAddToGC()

@@ -22,7 +22,7 @@ int main()
         std::cout << (*randomObject).getValue() << std::endl;
         String hello = "Hello";
         addWorld(hello);
-        std::cout << *hello << std::endl;
+        std::cout << hello << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds (10));
         i++;
     }
@@ -37,5 +37,5 @@ void changeObject(managed_ptr<RandomObject> obj)
 
 void addWorld(String hello)
 {
-    *hello += " World";
+    hello += " World";
 }
