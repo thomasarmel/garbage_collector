@@ -1,7 +1,6 @@
 #ifndef GARBAGE_COLLECTOR_MANAGED_PTR_H
 #define GARBAGE_COLLECTOR_MANAGED_PTR_H
 
-#include <functional>
 #include "GarbageCollector.h"
 
 template <typename T>
@@ -20,8 +19,9 @@ public:
 
 private:
     T *_object;
-    static void _deleter(void *object) {
-        delete static_cast<T*>(object); // Comment this line and you will see a memory leak.
+    static void _deleter(void *object) // Called by the garbage collector, the function is static in a way to avoid duplicating the object
+    {
+        delete static_cast<T*>(object); // Comment this line, and you will see a memory leak.
     };
 };
 

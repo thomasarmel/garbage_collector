@@ -11,7 +11,8 @@ int main()
     while(true)
     {
         managed_ptr<RandomObject> randomObject(new RandomObject(i));
-        std::this_thread::sleep_for(std::chrono::microseconds (10000));
+        managed_ptr<int> intPtr(new int(i));
+        std::this_thread::sleep_for(std::chrono::milliseconds (10));
         i++;
 
     }

@@ -4,7 +4,7 @@
 #ifdef _WIN32
 #elif _WIN64
 #else
-#error "Unsupported platform"
+#error "Unsupported platform yet"
 #endif
 
 #include <optional>

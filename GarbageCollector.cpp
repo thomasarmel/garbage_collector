@@ -2,6 +2,11 @@
 #include "GarbageCollector.h"
 #include "CurrentResourceUsage.h"
 
+//#include <iostream>
+
+constexpr unsigned char SECRETARY_PHASES_MAX_TICK[] = {7, 13};
+constexpr long long int SECRETARY_TICK_DURATION_MS = 10;
+
 GarbageCollector* GarbageCollector::_instance = nullptr;
 
 GarbageCollector::GarbageCollector()
@@ -40,24 +45,25 @@ void GarbageCollector::add(void* pointer, void (*destructorFunction)(void*))
                 minLoadPhase1 = currentCPUUsage;
             }
             phase1Counter++;
-            if(phase1Counter > 37)
+            if(phase1Counter > SECRETARY_PHASES_MAX_TICK[0])
             {
-                phase1 = false;
+                phase1 = false; // switch to phase 2
                 phase1Counter = 0;
             }
         }
-        else
+        else // phase 2
         {
-            if(currentCPUUsage <= minLoadPhase1 || phase2Counter > 63)
+            if(currentCPUUsage <= minLoadPhase1 || phase2Counter > SECRETARY_PHASES_MAX_TICK[1]) // CPU is low enough or phase 2 is over
             {
+                //std::cout << (int)phase2Counter << std::endl;
                 phase2Counter = 0;
-                minLoadPhase1 = 1.0f;
-                phase1 = true;
-                cleanMemory();
+                minLoadPhase1 = 1.0f; // reset min load
+                phase1 = true; // switch to phase 1
+                cleanMemory(); // Do effective garbage cleaning
             }
             phase2Counter++;
         }
-        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(SECRETARY_TICK_DURATION_MS)); // A little more actually
     }
 }
 
@@ -65,9 +71,9 @@ void GarbageCollector::cleanMemory()
 {
     while(!_garbage.empty())
     {
-        std::pair<void*, void(*)(void *)> pointerAndDestructorFunction = _garbage.front();
-        void (*destructorFunction)(void*) = static_cast<void (*)(void *)>(pointerAndDestructorFunction.second);
-        destructorFunction(pointerAndDestructorFunction.first);
+        const std::pair<void*, void(*)(void *)> &pointerAndDestructorFunction = _garbage.front();
+        void (*destructorFunction)(void*) = pointerAndDestructorFunction.second;
+        destructorFunction(pointerAndDestructorFunction.first); // Call destructor with raw pointer in parameter
         _garbage.pop();
     }
 }

@@ -1,4 +1,4 @@
-#include <iostream>
+//#include <iostream>
 #include "RandomObject.h"
 
 RandomObject::RandomObject(int i) : _i(i)
